@@ -5,6 +5,7 @@
             Board List :
             <div v-if="loading">Loading...</div>
             <div v-else>
+                <!-- //boards는 배열로 되어있으므로 v-for 확용 -->
                 <div v-for="b in boards" :key="b.id">
                     {{ b }}
                 </div>
