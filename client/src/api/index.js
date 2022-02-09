@@ -9,15 +9,15 @@ const onUnauthorized = () => {
 
 const request = (method, url, data) => {
     return axios({
-        method,
-        url: DOMAIN + url,
-        data
-    }).then(result => result.data)
-        .catch(result => {
-            const { status } = result.response
-            if(status === UNAUTHORIZED) return onUnauthorized()
-            throw Error(result)
-        })
+        method,             //통신 방식
+        url: DOMAIN + url,  // 통신할 웹 문서
+        data                //인자로 보낼 데이터(PUT, POST, PATCH)
+    }).then(result => result.data) //result : 읍답객체
+    .catch(result => {
+        const { status } = result.response
+        if(status === UNAUTHORIZED) return onUnauthorized()
+        throw Error(result)
+    })
 }
 
 export const board = {

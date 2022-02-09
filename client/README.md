@@ -1,6 +1,6 @@
 # vue-trello
 
-> A Vue.js project
+> trello clone coding project with Vue2
 
 ## Build Setup
 
