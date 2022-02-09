@@ -23,13 +23,14 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { board } from '../api'
 
 export default {
     data() {
         return {
             loading: false,
             boards: [],
+            error: '',
         }
     },
     created() {
@@ -39,14 +40,9 @@ export default {
         fetchData() {
             //fetchData가 호출되면 상탯값 변경 처리
             this.loading = true
-
-            axios.get('http://localhost:3000/boards')
-                .then(res => {
-                    this.boards = res.data
-                })
-                .catch(error => { //에러 발생시
-                    // console.log(error)
-                    this.$router.replace('/login') // vue-router에 $router객체를 이용해 로그인페이지로 이동
+            board.fetch()
+                .then(data => {
+                    this.boards = data
                 })
                 .finally(() => {
                     this.loading = false
