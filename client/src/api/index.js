@@ -15,13 +15,27 @@ const request = (method, url, data) => {
     }).then(result => result.data) //result : 읍답객체
     .catch(result => {
         const { status } = result.response
-        if(status === UNAUTHORIZED) return onUnauthorized()
-        throw Error(result)
+        if(status === UNAUTHORIZED) onUnauthorized()
+        throw result.response
     })
 }
 
+//axios기본 전역 설정
+export const setAuthInHeader = token => {
+    //axios로 요청을 날리기전에 모든 header정보에 토큰정보를 넣음
+    axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : null
+}
+
+//보드
 export const board = {
     fetch() {
         return request('get', '/boards')
+    }
+}
+
+//인증
+export const auth = {
+    login(email, password) {
+        return request('post', '/login', {email, password})
     }
 }

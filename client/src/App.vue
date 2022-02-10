@@ -2,7 +2,7 @@
 	<div id="app">
 		<!-- 여기서부터 코드를 시작합니다! -->
 		<nav-bar/>
-		<router-view></router-view>
+		<router-view class="container"></router-view>
 	</div>
 </template>
 
@@ -20,4 +20,5 @@ export default {
 </script>
 
 <style lang="scss">
+
 </style>
