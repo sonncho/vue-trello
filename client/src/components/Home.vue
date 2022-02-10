@@ -1,23 +1,19 @@
 <template>
     <div>
-        Home
-        <div>
-            Board List :
-            <div v-if="loading">Loading...</div>
-            <div v-else>
-                <!-- //boards는 배열로 되어있으므로 v-for 확용 -->
-                <div v-for="b in boards" :key="b.id">
-                    {{ b }}
-                </div>
+        <div class="home-title">Personal Boards</div>
+        <div class="board-list" ref="boardList">
+            <div class="board-item" v-for="b in boards" :key="b.id"
+                :data-bgcolor="b.bgColor" ref="boardItem"
+            >
+                <router-link :to="`/b/${b.id}`">
+                    <div class="board-item-title">{{ b.title }}</div>
+                </router-link>
             </div>
-            <ul>
-                <li>
-                    <router-link to="/b/1">Board 1</router-link>
-                </li>
-                <li>
-                    <router-link to="/b/2">Board 2</router-link>
-                </li>
-            </ul>
+            <div class="board-item board-item-new">
+                <a href="" class="new-board-btn" @click.prevent="addBoard">
+                    Create new Board...
+                </a>
+            </div>
         </div>
     </div>
 </template>
@@ -36,23 +32,63 @@ export default {
     created() {
         this.fetchData()
     },
+    updated() {
+        this.$refs.boardItem.forEach(el => {
+            el.style.backgroundColor = el.dataset.bgcolor
+        })
+    },
     methods: {
         fetchData() {
             //fetchData가 호출되면 상탯값 변경 처리
             this.loading = true
             board.fetch()
                 .then(data => {
-                    this.boards = data
+                    this.boards = data.list
                 })
                 .finally(() => {
                     this.loading = false
                 })
+        },
+        addBoard() {
+            console.log('add Board')
         }
     }
 }
 </script>
 
-<style scoped>
-
-
+<style lang="scss" scoped>
+    .home-title {
+        font-size: 1.125rem;
+        color: #5e6c84;
+        font-weight: 500;
+        margin-bottom: 20px;
+    }
+    .board-list {
+        display: flex;
+    }
+    .board-item {
+        margin: 0 2% 2% 0;
+        padding: 0;
+        transform: translate(0);
+        width: 18.4%;
+        border-radius: 4px;
+        .board-item-title {
+            height: 120px;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            line-height: 29px;
+        }
+        &.board-item-new {
+            background: #091e420a;
+            .new-board-btn {
+                height: 120px;
+                text-decoration: none;
+                color: #172b4d;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
 </style>
