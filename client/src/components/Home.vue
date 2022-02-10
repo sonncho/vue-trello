@@ -15,23 +15,30 @@
                 </a>
             </div>
         </div>
+        <add-board v-if="isAddBoard" @close="isAddBoard=false" @submit="onAddBoard" />
     </div>
 </template>
 
 <script>
 import { board } from '../api'
+import AddBoard from './AddBoard.vue'
 
 export default {
+    components:{
+        AddBoard,
+    },
     data() {
         return {
             loading: false,
             boards: [],
             error: '',
+            isAddBoard: false,
         }
     },
     created() {
         this.fetchData()
     },
+    // 변화가 감지될때 사용됨.
     updated() {
         this.$refs.boardItem.forEach(el => {
             el.style.backgroundColor = el.dataset.bgcolor
@@ -50,7 +57,13 @@ export default {
                 })
         },
         addBoard() {
-            console.log('add Board')
+            this.isAddBoard = true
+        },
+        onAddBoard(title) {
+            // console.log(title)
+            // api
+            board.create(title)
+                .then(() => this.fetchData())
         }
     }
 }
