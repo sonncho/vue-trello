@@ -1,5 +1,5 @@
 <template>
-    <div class="login">
+    <div class="login mt-5">
         <h2>Log in to Trello</h2>
         <form class="mb-3" @submit.prevent="onSubmit">
             <div class="mb-3">
@@ -56,7 +56,7 @@ export default {
                     this.$router.push(this.rPath)
                 })
                 .catch(err => {
-                    // console.log(err)
+                    console.log(err)
                     this.error = err.data.error
                 })
         }
