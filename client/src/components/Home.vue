@@ -22,6 +22,8 @@
 <script>
 import { board } from '../api'
 import AddBoard from './AddBoard.vue'
+import { mapState } from 'vuex'
+
 export default {
     components:{
         AddBoard,
@@ -31,8 +33,15 @@ export default {
             loading: false,
             boards: [],
             error: '',
-            isAddBoard: false,
         }
+    },
+    // computed: mapState([ ... ]) --> 이런식으로 사용하면 다른 computed속성을
+    // 정의할 수 없으므로 ES6문법의 해체 문법을 사용함.
+    computed: {
+        // this.isAddBoard를 store.state.isBoard에 매핑함.
+        ...mapState([
+            'isAddBoard' 
+        ])
     },
     created() {
         this.fetchData()
