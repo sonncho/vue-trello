@@ -3,7 +3,7 @@
         <div class="modal-mask">
             <div class="modal-wrapper">
                 <div class="modal-container">
-                    <div class="modal-header">
+                    <div class="modal-header text-center">
                         <slot name="header"> default header </slot>
                     </div>
 
@@ -52,12 +52,20 @@ export default {
     .modal-container {
     width: 450px;
     margin: 0px auto;
-    padding: 20px 30px;
     background-color: #fff;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
     transition: all .3s ease;
     font-family: Helvetica, Arial, sans-serif;
+    }
+    .modal-header {   
+        position: relative;
+        display: block;
+        padding: 1rem;
+        h3 {
+            font-size: 1.5rem;
+        }
+
     }
     .modal-body {
     margin: 20px 0;
@@ -68,7 +76,6 @@ export default {
     .modal-enter {
     opacity: 0;
     }
-
     .modal-leave-active {
     opacity: 0;
     }

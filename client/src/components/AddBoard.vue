@@ -1,7 +1,7 @@
 <template>
     <Modal>
         <div slot="header">
-            <h3>Create new board</h3>
+            <h3 class="modal-title">Create new board</h3>
             <a href="" class="modal-default-button" @click.prevent="close">&times;</a>
         </div>
         <div slot="body">
@@ -32,6 +32,7 @@ export default {
     },
     watch: {
         input(v) {
+            //공백을 모두 제거하고 값이 있으면 valid 는 true
             this.valid = v.trim().length > 0
         }
     },
@@ -53,5 +54,14 @@ export default {
 </script>
 
 <style lang="scss">
+.modal-title {
+    font-size: 1.125rem;
+}
+.modal-default-button {
+    position: absolute;
+    right: 1rem;
+    top: 16px;
+    text-decoration: none;
+}
 
 </style>

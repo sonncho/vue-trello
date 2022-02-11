@@ -22,7 +22,6 @@
 <script>
 import { board } from '../api'
 import AddBoard from './AddBoard.vue'
-
 export default {
     components:{
         AddBoard,
@@ -76,15 +75,16 @@ export default {
         font-weight: 500;
         margin-bottom: 20px;
     }
-    .board-list {
-        display: flex;
-    }
     .board-item {
         margin: 0 2% 2% 0;
         padding: 0;
+        float: left;
         transform: translate(0);
         width: 18.4%;
         border-radius: 4px;
+        &:nth-child(5n) {
+            margin-right: 0;
+        }
         .board-item-title {
             height: 120px;
             color: #fff;
