@@ -15,14 +15,14 @@
                 </a>
             </div>
         </div>
-        <add-board v-if="isAddBoard" @close="isAddBoard=false" @submit="onAddBoard" />
+        <add-board v-if="isAddBoard" @close="isAddBoard=false"/>
     </div>
 </template>
 
 <script>
 import { board } from '../api'
 import AddBoard from './AddBoard.vue'
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState, mapActions } from 'vuex'
 
 export default {
     components:{
@@ -31,7 +31,6 @@ export default {
     data() {
         return {
             loading: false,
-            boards: [],
             error: '',
         }
     },
@@ -39,9 +38,10 @@ export default {
     // 정의할 수 없으므로 ES6문법의 해체 문법을 사용함.
     computed: {
         // this.isAddBoard를 store.state.isBoard에 매핑함.
-        ...mapState([
-            'isAddBoard' 
-        ])
+        ...mapState({
+            isAddBoard : 'isAddBoard',
+            boards: 'boards',
+        })
     },
     created() {
         this.fetchData()
@@ -56,20 +56,16 @@ export default {
         ...mapMutations ([
             'SET_IS_ADD_BOARD',
         ]),
+        ...mapActions ([
+            'FETCH_BOARDS',
+        ]),
         fetchData() {
             //fetchData가 호출되면 상탯값 변경 처리
             this.loading = true
-            board.fetch()
-                .then(data => {
-                    this.boards = data.list
-                })
-                .finally(() => {
-                    this.loading = false
-                })
+            this.FETCH_BOARDS().finally(_ => {
+                this.loading = false
+            })
         },
-        onAddBoard() {
-            this.fetchData()
-        }
     }
 }
 </script>
