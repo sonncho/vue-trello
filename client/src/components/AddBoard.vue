@@ -2,7 +2,7 @@
     <Modal>
         <div slot="header">
             <h3 class="modal-title">Create new board</h3>
-            <a href="" class="modal-default-button" @click.prevent="close">&times;</a>
+            <a href="" class="modal-default-button" @click.prevent="SET_IS_ADD_BOARD(false)">&times;</a>
         </div>
         <div slot="body">
             <form id="add-board-form" @submit.prevent="addBoard">
@@ -19,6 +19,7 @@
 
 <script>
 import Modal from './Modal.vue'
+import { mapMutations } from 'vuex'
 
 export default {
     components: {
@@ -40,12 +41,11 @@ export default {
         this.$refs.input.focus()
     },
     methods: {
-        close() {
-            // 상위컴포넌트에서 사용하기 위해 $emit사용
-            this.$emit('close')
-        },
+        ...mapMutations([
+            'SET_IS_ADD_BOARD',
+        ]),
         addBoard() {
-            this.$emit('close')
+            this.SET_IS_ADD_BOARD(false)
             this.$emit('submit', this.input);
         }
     }

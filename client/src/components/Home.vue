@@ -10,7 +10,7 @@
                 </router-link>
             </div>
             <div class="board-item board-item-new">
-                <a href="" class="new-board-btn" @click.prevent="addBoard">
+                <a href="" class="new-board-btn" @click.prevent="SET_IS_ADD_BOARD(true)">
                     Create new Board...
                 </a>
             </div>
@@ -22,7 +22,7 @@
 <script>
 import { board } from '../api'
 import AddBoard from './AddBoard.vue'
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
     components:{
@@ -53,6 +53,9 @@ export default {
         })
     },
     methods: {
+        ...mapMutations ([
+            'SET_IS_ADD_BOARD',
+        ]),
         fetchData() {
             //fetchData가 호출되면 상탯값 변경 처리
             this.loading = true
@@ -63,9 +66,6 @@ export default {
                 .finally(() => {
                     this.loading = false
                 })
-        },
-        addBoard() {
-            this.isAddBoard = true
         },
         onAddBoard(title) {
             // console.log(title)
