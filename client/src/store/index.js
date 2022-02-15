@@ -8,6 +8,12 @@ const store = new Vuex.Store({
     state: {
         isAddBoard: false,
         boards: [],
+        token: null, //인증여보를 체크하는 state
+    },
+    getters: {
+        isAuth(state) {
+            return !!state.token
+        }
     },
     mutations: {
         SET_IS_ADD_BOARD (state, toggle) {
@@ -15,7 +21,18 @@ const store = new Vuex.Store({
         },
         SET_BOARDS(state, boards) {
             state.boards = boards
-        }
+        },
+        LOGIN (state, token) {
+            if(!token) return
+            state.token = token
+            localStorage.setItem('token', token)
+            api.setAuthInHeader(token)
+        },
+        LOGOUT (state) {
+            state.token = null
+            delete localStorage.token
+            api.setAuthInHeader(null)
+        },
     },
     actions: {
         //context를 사용하지 않을거기떄문에 '_' 언더바 삽입
@@ -26,8 +43,15 @@ const store = new Vuex.Store({
             return api.board.fetch().then(data => {
                 commit('SET_BOARDS', data.list)
             })
-        }
+        },
+        LOGIN({commit}, {email, password}) {
+            return api.auth.login(email, password)
+                .then(({accessToken}) => commit('LOGIN', accessToken))
+        },
     },
 })
+
+const { token } = localStorage
+store.commit('LOGIN', token)
 
 export default store

@@ -21,18 +21,20 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { setAuthInHeader } from '../api'
+import { mapGetters, mapMutations } from 'vuex'
+
 export default {
     computed: {
-        isAuth() {
-            return !!localStorage.getItem('token')
-        }
+        ...mapGetters([
+            'isAuth',
+        ]),
     },
     methods: {
+        ...mapMutations([
+            'LOGOUT',
+        ]),
         logout() {
-            delete localStorage.token   //로컬스토리지의 token삭제
-            setAuthInHeader(null)       //setAuthInHeader에 null전달
+            this.LOGOUT()
             this.$router.push('/login')
         }
     }

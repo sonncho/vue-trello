@@ -25,6 +25,7 @@
 
 <script>
 import { auth, setAuthInHeader } from '../api'
+import { mapActions } from 'vuex'
 
 export default {
     data() {
@@ -45,18 +46,20 @@ export default {
         this.rPath = this.$route.query.rPath || '/'
     },
     methods: {
+        ...mapActions([
+            'LOGIN',
+        ]),
         //form submit되면 onSubmit이벤트 호출
         //우선은 콜솔에 입력한 이메일과 password를 출력
         onSubmit() {
+            this.LOGIN({email: this.email, password: this.password})
             // console.log(this.email, this.password)
+
             auth.login(this.email, this.password)
                 .then(data => {
-                    localStorage.setItem('token', data.accessToken)
-                    setAuthInHeader(data.accessToken)
                     this.$router.push(this.rPath)
                 })
                 .catch(err => {
-                    console.log(err)
                     this.error = err.data.error
                 })
         }
