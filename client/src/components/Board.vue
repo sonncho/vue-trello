@@ -4,6 +4,7 @@
         <div v-if="loading">Loading Board...</div>
         <div v-else>
             <div>bid : {{ bid }}</div>
+            <pre>{{ board }}</pre>
             <router-link :to="`/b/${bid}/c/1`">Card 1</router-link>
             <router-link :to="`/b/${bid}/c/2`">Card 2</router-link>
         </div>
@@ -13,6 +14,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
     data(){
         return {
@@ -20,18 +22,24 @@ export default {
             loading: true,
         }
     },
+    computed: {
+        ...mapState({
+            board: 'board'
+        })
+    },
     created(){
         this.fetchData()
         // console.log('bid : '+ this.$route.params.bid)
     },
     methods: {
+        ...mapActions([
+            'FETCH_BOARD',
+        ]),
         fetchData(){
             this.loading = true
-            //0.5초후에 상태값 loading을 false로 변경
-            setTimeout(() => {
-                this.bid = this.$route.params.bid
-                this.loading = false
-            }, 500);
+
+            this.FETCH_BOARD({id: this.$route.params.bid})
+                .then(() => this.loading = false)
         },
     },
 }
