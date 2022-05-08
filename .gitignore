@@ -4,6 +4,7 @@ dist/
 npm-debug.log
 yarn-error.log
 db-dev.sqlite
+server/db-dev.sqlite
 
 # Editor directories and files
 .idea

@@ -1,21 +1,23 @@
 <template>
     <div>
-        <div class="home-title">Personal Boards</div>
-        <div class="board-list" ref="boardList">
-            <div class="board-item" v-for="b in boards" :key="b.id"
-                :data-bgcolor="b.bgColor" ref="boardItem"
-            >
-                <router-link :to="`/b/${b.id}`">
-                    <div class="board-item-title">{{ b.title }}</div>
-                </router-link>
+        <b-container size="lg">
+            <div class="home-title">Personal Boards</div>
+            <div class="board-list" ref="boardList">
+                <div class="board-item" v-for="b in boards" :key="b.id"
+                    :data-bgcolor="b.bgColor" ref="boardItem"
+                >
+                    <router-link :to="`/b/${b.id}`">
+                        <div class="board-item-title">{{ b.title }}</div>
+                    </router-link>
+                </div>
+                <div class="board-item board-item-new">
+                    <a href="" class="new-board-btn" @click.prevent="SET_IS_ADD_BOARD(true)">
+                        Create new Board...
+                    </a>
+                </div>
             </div>
-            <div class="board-item board-item-new">
-                <a href="" class="new-board-btn" @click.prevent="SET_IS_ADD_BOARD(true)">
-                    Create new Board...
-                </a>
-            </div>
-        </div>
-        <add-board v-if="isAddBoard" @close="isAddBoard=false"/>
+            <add-board v-if="isAddBoard" @close="isAddBoard=false"/>
+        </b-container>
     </div>
 </template>
 

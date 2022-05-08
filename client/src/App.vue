@@ -1,8 +1,8 @@
 <template>
 	<div id="app">
 		<!-- 여기서부터 코드를 시작합니다! -->
-		<nav-bar/>
-		<router-view class="container mt-5"></router-view>
+		<nav-bar />
+		<router-view></router-view>
 	</div>
 </template>
 
