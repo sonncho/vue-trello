@@ -1,42 +1,79 @@
 <template>
-    <div>
-        Card
-        <div v-if="loading">Loading Card...</div>
-        <div v-else>
-            cid: {{ cid }}
-        </div>
+  <modal class="modal-card">
+    <div slot="header" class="modal-card-header">
+      <div class="modal-card-header-title">
+        <input
+          class="form-control"
+          type="text"
+          :value="card.title"
+          readonly
+        />
+      </div>
+      <a class="modal-close-btn" href="" @click.prevent.stop="onClose">&times;</a>
     </div>
+    <div slot="body">
+      <h3>Description</h3>
+      <textarea
+        class="form-control"
+        cols="30"
+        rows="3"
+        placeholder="Add a more detailed description..."
+        v-model="card.description"
+      ></textarea>
+    </div>
+    <div slot="footer"></div>
+  </modal>
 </template>
 
 <script>
+import Modal from "./Modal.vue";
+import { mapActions, mapState } from "vuex";
 
 export default {
-    data() {
-        return {
-            cid: 0,
-            loading: false, // loading 초기 상태값(boolean)
-        }
+  components: {
+    Modal,
+  },
+  data() {
+    return {
+      loading: false, // loading 초기 상태값(boolean)
+    };
+  },
+  computed: {
+    ...mapState({
+      card: "card",
+      board: "board"
+    }),
+  },
+  created() {
+    const id = this.$route.params.cid;
+    this.FETCH_CARD({ id });
+  },
+  methods: {
+    ...mapActions(["FETCH_CARD"]),
+    onClose() {
+      this.$router.push(`/b/${this.board.id}`);
     },
-    watch: {
-				//기존'$route'()함수형태에서 객체형태로 변경
-				//옵션값 추가
-        '$route': {
-            handler: 'fetchData', //fetchData 함수 실행
-            immediate: true, //즉시 실행 옵션
-        }
-    },
-    methods: {
-        fetchData() {
-            this.loading = true
-            setTimeout(() => {
-                this.cid = this.$route.params.cid
-                this.loading = false
-            }, 500);
-        }
-    }
-}
+  },
+};
 </script>
 
 <style scoped>
-
+.modal-card .modal-container {
+  min-width: 300px;
+  max-width: 800px;
+  width: 60%;
+}
+.modal-card-header-title {
+  padding-right: 30px;
+}
+.modal-close-btn {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  font-size: 24px;
+  text-decoration: none;
+}
+.modal-card-header {
+  position: relative;
+}
 </style>
