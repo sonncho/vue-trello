@@ -11,7 +11,10 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
+    props: ['listId'],
     data() {
         return {
             inputTitle: ''
@@ -28,8 +31,17 @@ export default {
         this.setupClickOutside(this.$el)
     },
     methods: {
+        ...mapActions([
+            'ADD_CARD'
+        ]),
         onSubmit() {
-            console.log('submit event')
+            //input값이 없으면 return
+            if (this.invalidInput) return
+            
+            const { inputTitle, listId } = this
+            //pos는 option값(필수x)
+            this.ADD_CARD({title: inputTitle, listId})
+                .finally(() => this.inputTitle = '')
         },
         //외부 클릭시 add card form 닫는 이벤트생성
         setupClickOutside(el) {
