@@ -2,11 +2,15 @@
   <modal class="modal-card">
     <div slot="header" class="modal-card-header">
       <div class="modal-card-header-title">
+        <b-icon icon="card-heading" scale="1.2" style="width: 30px; margin-right: 3px" />
         <input
           class="form-control"
           type="text"
           :value="card.title"
-          readonly
+          :readonly="!toggleTitle"
+          @click="toggleTitle=true"
+          @blur="onBlurTitle"
+          ref="inputTitle"
         />
       </div>
       <a class="modal-close-btn" href="" @click.prevent.stop="onClose">&times;</a>
@@ -36,6 +40,7 @@ export default {
   data() {
     return {
       loading: false, // loading 초기 상태값(boolean)
+      toggleTitle: false
     };
   },
   computed: {
@@ -45,19 +50,41 @@ export default {
     }),
   },
   created() {
-    const id = this.$route.params.cid;
-    this.FETCH_CARD({ id });
+    this.fetchCard()
   },
   methods: {
-    ...mapActions(["FETCH_CARD"]),
+    ...mapActions([
+      'FETCH_CARD',
+      'UPDATE_CARD'
+    ]),
     onClose() {
       this.$router.push(`/b/${this.board.id}`);
     },
+    fetchCard() {
+      const id = this.$route.params.cid;
+      this.FETCH_CARD({ id })
+    },
+    onBlurTitle() {
+      this.toggleTitle = false
+      const title = this.$refs.inputTitle.value.trim()
+      if(!title) return
+
+      this.UPDATE_CARD({ id: this.card.id, title })
+        .then(() => this.fetchCard())
+    }
   },
 };
 </script>
 
 <style scoped>
+input {
+  padding: .4rem;
+  font-size: 20px;
+}
+input:read-only {
+  border: 0;
+  background-color: transparent;
+} 
 .modal-card .modal-container {
   min-width: 300px;
   max-width: 800px;
@@ -65,6 +92,8 @@ export default {
 }
 .modal-card-header-title {
   padding-right: 30px;
+  display: flex;
+  align-items: center;
 }
 .modal-close-btn {
   position: absolute;
