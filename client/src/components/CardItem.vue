@@ -2,7 +2,7 @@
     <div class="card-item">
         <router-link :to="`/b/${boardId}/c/${data.id}`">
           <div>{{ data.title }}</div>
-          <div class="card-item-meta" v-if="data.description">&equiv;</div>
+          <div class="card-item-meta" v-if="data.description"><b-icon icon="justify-left" /></div>
         </router-link>
     </div>
 </template>
@@ -43,7 +43,7 @@ export default {
   cursor: pointer;
 }
 .card-item-meta {
-  font-size: 26px;
+  font-size: 20px;
   padding: 5px 0 0 3px;
   color: #8c8c8c;  
 }

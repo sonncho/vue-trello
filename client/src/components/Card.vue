@@ -80,8 +80,8 @@ export default {
     },
     onBlurDesc() {
       this.toggleDesc = false
-      const desc = this.$refs.inputDesc.value.trim()
-      if(!desc) return
+      const description = this.$refs.inputDesc.value.trim()
+      if(!description) return
 
       this.UPDATE_CARD({ id: this.card.id, description })
         .then(() => this.fetchCard())
@@ -94,6 +94,7 @@ export default {
 input {
   padding: .4rem;
   font-size: 20px;
+  font-weight: bold;
 }
 input:read-only, textarea {
   border: 0;
