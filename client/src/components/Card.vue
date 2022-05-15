@@ -16,13 +16,18 @@
       <a class="modal-close-btn" href="" @click.prevent.stop="onClose">&times;</a>
     </div>
     <div slot="body">
-      <h3>Description</h3>
+      <h3 style="font-size: 18px; margin-bottom: 20px"
+      ><span><b-icon icon="justify-left" /></span>
+        Description</h3>
       <textarea
         class="form-control"
         cols="30"
         rows="3"
         placeholder="Add a more detailed description..."
         v-model="card.description"
+        :readonly="!toggleDesc"
+        @click="toggleDesc = true" @blur="onBlurDesc"
+        ref="inputDesc"
       ></textarea>
     </div>
     <div slot="footer"></div>
@@ -40,7 +45,8 @@ export default {
   data() {
     return {
       loading: false, // loading 초기 상태값(boolean)
-      toggleTitle: false
+      toggleTitle: false,
+      toggleDesc: false
     };
   },
   computed: {
@@ -71,6 +77,14 @@ export default {
 
       this.UPDATE_CARD({ id: this.card.id, title })
         .then(() => this.fetchCard())
+    },
+    onBlurDesc() {
+      this.toggleDesc = false
+      const desc = this.$refs.inputDesc.value.trim()
+      if(!desc) return
+
+      this.UPDATE_CARD({ id: this.card.id, description })
+        .then(() => this.fetchCard())
     }
   },
 };
@@ -81,7 +95,7 @@ input {
   padding: .4rem;
   font-size: 20px;
 }
-input:read-only {
+input:read-only, textarea {
   border: 0;
   background-color: transparent;
 } 
