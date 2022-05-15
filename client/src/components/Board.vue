@@ -27,8 +27,7 @@
 <script>
 import { mapState, mapActions } from "vuex"
 import List from "./List.vue"
-import dragula from 'dragula'
-import 'dragula/dist/dragula.css'
+import dragger from '../utils/dragger'
 
 export default {
   components: {
@@ -38,7 +37,7 @@ export default {
     return {
       bid: 0,
       loading: true,
-      dragularCards: null
+      cDragger: null //card Dragger의 상태값
     };
   },
   computed: {
@@ -47,51 +46,16 @@ export default {
     }),
   },
   updated() {
-    // dragularCard 상태 값 초기화
-    if(this.dragularCards) this.dragularCards.destroy()
-
-    this.dragularCards = dragula([
-      ...Array.from(this.$el.querySelectorAll('.card-list'))
-    ]).on('drop', (el, wrapper, target, siblings) => {
-      const targetCard = {
-        id: el.dataset.cardId * 1,
-        pos: 65535
-      }
-
-      let prevCard = null
-      let nextCard = null
-
-      Array.from(wrapper.querySelectorAll('.card-item'))
-        .forEach((el, idx, arr) => {
-          const cardId = el.dataset.cardId * 1
-          if(cardId == targetCard.id) {
-            prevCard = idx > 0 ? {
-              id: arr[idx-1].dataset.cardId * 1,
-              pos: arr[idx-1].dataset.cardPos * 1
-            } : null
-            nextCard = idx < arr.length -1 ? {
-              id: arr[idx + 1].dataset.cardId * 1,
-              pos: arr[idx + 1].dataset.cardPos * 1
-            } : null
-          }
-        })
-      if (!prevCard && nextCard) targetCard.pos = nextCard.pos / 2
-      else if (!nextCard && prevCard) targetCard.pos = prevCard.pos * 2
-      else if (prevCard && nextCard) targetCard.pos = (prevCard.pos + nextCard.pos) / 2
-
-      console.log(targetCard)
-      this.UPDATE_CARD(targetCard)
-    })
+    //보드의 자식컴포넌트가 모두 렌더링된후 호출시키기 위해 updated에서 호출
+    this.setCardDragabble()
   },
   created() {
     this.fetchData();
-    // console.log('bid : '+ this.$route.params.bid)
   },
   methods: {
     ...mapActions([
       'FETCH_BOARD',
-      'UPDATE_CARD',
-
+      'UPDATE_CARD'
       ]),
     fetchData() {
       this.loading = true;
@@ -100,6 +64,33 @@ export default {
         () => (this.loading = false)
       );
     },
+    setCardDragabble() {
+      if (this.cDragger) this.cDragger.destroy()
+      this.cDragger = dragger.init(Array.from(this.$el.querySelectorAll('.card-list')))
+
+      this.cDragger.on('drop', (el, wrapper, target, silblings) => {
+        const targetCard = {
+          id: el.dataset.cardId * 1,
+          pos: 65535
+        }
+
+        const { prev, next } = dragger.silblings({
+          el, 
+          wrapper, 
+          candidates: Array.from(wrapper.querySelectorAll('.card-item')), 
+          type: 'card'
+        })
+
+        // 가장 첫번쨰 요소로 이동했다면
+        if (!prev && next) targetCard.pos = next.pos / 2
+        // 가장 마지막 요소로 이동했다면
+        else if (!next && prev) targetCard.pos = prev.pos * 2
+        // 중간으로 이동했다면
+        else if (prev && next) targetCard.pos = (prev.pos + next.pos) / 2
+
+        this.UPDATE_CARD(targetCard)
+      })
+    }
   },
 };
 </script>
