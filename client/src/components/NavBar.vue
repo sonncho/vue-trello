@@ -3,7 +3,7 @@
     <!-- <router-link to="/">Home</router-link>
         <router-link to="/login">Login</router-link> -->
     <nav class="header navbar">
-      <div class="container-lg">
+      <div class="container-fluid px-3">
         <div class="header-logo">
           <router-link to="/">Trello</router-link>
         </div>
