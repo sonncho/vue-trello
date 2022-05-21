@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import { board } from "../api";
 import AddBoard from "./AddBoard.vue";
 import { mapMutations, mapState, mapActions } from "vuex";
 
@@ -54,7 +53,8 @@ export default {
     }),
   },
   created() {
-    this.fetchData();
+    this.fetchData()
+    this.SET_THEME()
   },
   // 변화가 감지될때 사용됨.
   updated() {
@@ -63,7 +63,10 @@ export default {
     });
   },
   methods: {
-    ...mapMutations(["SET_IS_ADD_BOARD"]),
+    ...mapMutations([
+      'SET_IS_ADD_BOARD',
+      'SET_THEME'
+    ]),
     ...mapActions(["FETCH_BOARDS"]),
     fetchData() {
       //fetchData가 호출되면 상탯값 변경 처리

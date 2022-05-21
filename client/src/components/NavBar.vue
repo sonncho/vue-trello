@@ -3,7 +3,7 @@
     <!-- <router-link to="/">Home</router-link>
         <router-link to="/login">Login</router-link> -->
     <nav class="header navbar">
-      <div class="container">
+      <div class="container-lg">
         <div class="header-logo">
           <router-link to="/">Trello</router-link>
         </div>
@@ -26,11 +26,21 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 
 export default {
   computed: {
     ...mapGetters(["isAuth"]),
+    ...mapState({
+      navbarColor : 'navbarColor',
+      bodyColor: 'bodyColor'
+    })
+  },
+  watch: {
+    'bodyColor' : 'updateTheme'
+  },
+  mounted() {
+    this.updateTheme()
   },
   methods: {
     ...mapMutations(["LOGOUT"]),
@@ -38,13 +48,22 @@ export default {
       this.LOGOUT();
       this.$router.push("/login");
     },
+    updateTheme() {
+      console.log(this.$el)
+      this.$el.style.backgroundColor = this.navbarColor
+
+      const body = document.querySelector('body')
+      const container = document.querySelector('.container')
+      if(body) body.style.backgroundColor = this.bodyColor
+      if (container) container.style.backgroundColor = this.bodyColor
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .header {
-  background-color: #026aa7;
+  /* background-color: #026aa7; */
   .header-logo a {
     font-size: 1.25rem;
     font-weight: bold;

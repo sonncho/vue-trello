@@ -4,9 +4,8 @@
     <div v-else>
       <div class="boarder-wrapper p-3">
         <div class="board">
-          Board
           <div class="board-header">
-            <span class="border-title">{{ board.title }}</span>
+            <span class="border-title text-light">{{ board.title }}</span>
           </div>
           <!-- <pre>{{ board }}</pre> -->
         </div>
@@ -25,7 +24,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex"
+import { mapState, mapActions, mapMutations } from "vuex"
 import List from "./List.vue"
 import dragger from '../utils/dragger'
 
@@ -50,9 +49,14 @@ export default {
     this.setCardDragabble()
   },
   created() {
-    this.fetchData();
+    this.fetchData().then(() => {
+      this.SET_THEME(this.board.bgColor )
+    })
   },
   methods: {
+    ...mapMutations([
+      'SET_THEME'
+    ]),
     ...mapActions([
       'FETCH_BOARD',
       'UPDATE_CARD'
@@ -60,7 +64,7 @@ export default {
     fetchData() {
       this.loading = true;
 
-      this.FETCH_BOARD({ id: this.$route.params.bid }).then(
+      return this.FETCH_BOARD({ id: this.$route.params.bid }).then(
         () => (this.loading = false)
       );
     },
