@@ -5,7 +5,17 @@
       <div class="board-wrapper">
         <div class="board  p-3">
           <div class="board-header">
-            <span class="board-title text-light">{{ board.title }}</span>
+            <input
+              class="form-control"
+              v-if="isEditTitle"
+              type="text"
+              v-model="inputTitle"
+              ref="inputTitle"
+              @blur="onSubmitTitle"
+              @keyup.enter="onSubmitTitle"
+              style="max-width: 240px;"
+            />
+            <span v-else class="board-title text-light" @click="onClickTitle">{{ board.title }}</span>
             <a href="" class="board-header-btn show-menu" @click.prevent="onShowSettings">
               ... Show Menu
             </a>
@@ -40,7 +50,9 @@ export default {
     return {
       bid: 0,
       loading: true,
-      cDragger: null //card Dragger의 상태값
+      cDragger: null, //card Dragger의 상태값
+      isEditTitle: false,
+      inputTitle: ''
     };
   },
   computed: {
@@ -55,6 +67,7 @@ export default {
   },
   created() {
     this.fetchData().then(() => {
+      this.inputTitle = this.board.title
       this.SET_THEME(this.board.bgColor )
     })
     this.SET_IS_SHOW_BOARD_SETTINGS(false)
@@ -66,7 +79,8 @@ export default {
     ]),
     ...mapActions([
       'FETCH_BOARD',
-      'UPDATE_CARD'
+      'UPDATE_CARD',
+      'UPDATE_BOARD',
       ]),
     fetchData() {
       this.loading = true;
@@ -104,6 +118,24 @@ export default {
     },
     onShowSettings() {
       this.SET_IS_SHOW_BOARD_SETTINGS(true)
+    },
+    onClickTitle() {
+      this.isEditTitle = true
+      this.$nextTick(() => {
+        this.$refs.inputTitle.focus()
+      })
+    },
+    onSubmitTitle() {
+      this.isEditTitle = false //타이틀을 수정여부를  false로 변경
+      this.inputTitle = this.inputTitle.trim() //입력된 타이틀값의 공백 제거
+      if(!this.inputTitle) return // 입력된 타이틀 값이 없다면 return
+
+      const id = this.board.id
+      const title = this.inputTitle
+
+      if (title === this.board.title) return //현재 타이틀과 입력된 타이틀값이 같으면 return
+
+      this.UPDATE_BOARD({id, title})
     }
   },
 };
