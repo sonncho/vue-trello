@@ -49,7 +49,6 @@ export default {
       this.$router.push("/login");
     },
     updateTheme() {
-      console.log(this.$el)
       this.$el.style.backgroundColor = this.navbarColor
 
       const body = document.querySelector('body')
