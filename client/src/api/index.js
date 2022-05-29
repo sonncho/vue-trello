@@ -45,10 +45,9 @@ export const board = {
     }
 }
 
-//인증
-export const auth = {
-    login(email, password) {
-        return request('post', '/login', {email, password})
+export const list =  {
+    create(payload) {
+        return request('post', '/lists', payload)
     }
 }
 
@@ -64,5 +63,11 @@ export const card = {
     },
     destory(id) {
         return request('delete', `/cards/${id}`)
+    }
+}
+//인증
+export const auth = {
+    login(email, password) {
+        return request('post', '/login', {email, password})
     }
 }
