@@ -15,6 +15,7 @@
         class="list-header-title"
         @click="onClickTitle"
       >{{ data.title }}</div>
+      <a class="delete-list-btn" href="" @click.prevent="onDeleteList"><b-icon icon="three-dots" font-scale=".8" /></a>
     </div>
     <div class="card-list" :data-list-id="data.id">
       <card-item v-for="card in data.cards" :key="card.id" :data="card" />
@@ -50,7 +51,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'UPDATE_LIST'
+      'UPDATE_LIST',
+      'DELETE_LIST',
     ]),
     onClickTitle() {
       this.isEditTitle = true
@@ -70,6 +72,10 @@ export default {
       if(title == this.data.title) return
 
       this.UPDATE_LIST({id, title})
+    },
+    onDeleteList() {
+      if(!window.confirm(`Delete ${this.data.title} list?`)) return
+      this.DELETE_LIST({ id: this.data.id })
     }
   },
 };
@@ -110,5 +116,13 @@ export default {
 .add-card-btn:focus {
   background-color: rgba(0, 0, 0, 0.1);
   color: #222;
+}
+.delete-list-btn {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  text-decoration: none;
+  color: #aaa;
+  font-size: 24px;
 }
 </style>
