@@ -26,13 +26,17 @@ const actions = {
         return api.board.update(id, { title, bgColor })
             .then(() => dispatch('FETCH_BOARD', { id: state.board.id }))
     },
-    
+
     ADD_LIST({dispatch, state}, { title, boardId, pos}) {
         return api.list.create({title, boardId, pos})
             .then(_ => dispatch('FETCH_BOARD', {id: state.board.id}))
     },
     UPDATE_LIST({dispatch, state}, { id, pos, title}) {
         return api.list.update(id, { pos, title })
+            .then(_ => dispatch('FETCH_BOARD', { id: state.board.id}))
+    },
+    DELETE_LIST({ dispatch, state }, { id }) {
+        return api.list.destroy(id)
             .then(_ => dispatch('FETCH_BOARD', { id: state.board.id}))
     },
 
