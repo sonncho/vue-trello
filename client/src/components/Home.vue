@@ -1,28 +1,32 @@
 <template>
   <div>
     <b-container size="lg">
-      <div class="home-title">Personal Boards</div>
+      <div class="home-title">YOUR WORKSPACES</div>
       <div class="board-list" ref="boardList">
-        <div
-          class="board-item"
-          v-for="b in boards"
-          :key="b.id"
-          :data-bgcolor="b.bgColor"
-          ref="boardItem"
-        >
-          <router-link :to="`/b/${b.id}`">
-            <div class="board-item-title">{{ b.title }}</div>
-          </router-link>
-        </div>
-        <div class="board-item board-item-new">
-          <a
-            href=""
-            class="new-board-btn"
-            @click.prevent="SET_IS_ADD_BOARD(true)"
-          >
-            Create new Board...
-          </a>
-        </div>
+        <b-row>
+          <b-col v-for="b in boards" :key="b.id" sm="6" md="4" lg="3" class="mb-3">
+            <div
+              class="board-item"
+              :data-bgcolor="b.bgColor"
+              ref="boardItem"
+            >
+              <router-link :to="`/b/${b.id}`">
+                <div class="board-item-title">{{ b.title }}</div>
+              </router-link>
+            </div>
+          </b-col>
+          <b-col sm="6" md="4" lg="3">
+            <div class="board-item board-item-new">
+              <a
+                href=""
+                class="new-board-btn"
+                @click.prevent="SET_IS_ADD_BOARD(true)"
+              >
+                Create new Board...
+              </a>
+            </div>
+          </b-col>
+        </b-row>
       </div>
       <add-board v-if="isAddBoard" @close="isAddBoard = false" />
     </b-container>
@@ -83,24 +87,18 @@ export default {
 .home-title {
   font-size: 1.125rem;
   color: #5e6c84;
-  font-weight: 500;
+  font-weight: 700;
   margin-bottom: 20px;
+  padding-top: 40px;
 }
 .board-item {
-  margin: 0 2% 2% 0;
-  padding: 0;
-  float: left;
-  transform: translate(0);
-  width: 18.4%;
   border-radius: 4px;
-  &:nth-child(5n) {
-    margin-right: 0;
-  }
+  a { text-decoration: none; }
   .board-item-title {
     height: 120px;
     color: #fff;
-    text-decoration: none;
     padding: 10px;
+    font-weight: 700;
     line-height: 29px;
   }
   &.board-item-new {
