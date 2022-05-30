@@ -2,11 +2,11 @@ import dragula from 'dragula'
 import 'dragula/dist/dragula.css'
 
 const dragger = {
-  init(container) {
-    return dragula([...container])
+  init(container, options) {
+    return dragula([...container], options)
   },
 
-  silblings({ el, wrapper, candidates, type }) { //전객체와 다음객체를 반환
+  sibling({ el, wrapper, candidates, type }) { //전객체와 다음객체를 반환
     const curId = el.dataset[type + 'Id'] * 1
 
     let prev = null

@@ -24,7 +24,7 @@
         <board-settings v-if="isShowBoardSettings" />
         <div class="list-section-wrapper">
           <div class="list-section">
-            <div class="list-wrapper" v-for="list in board.lists" :key="list.pos">
+            <div class="list-wrapper" v-for="list in board.lists" :key="list.pos" :data-list-id="list.id">
               <List :data="list" />
             </div>
             <div class="list-wrapper">
@@ -56,6 +56,7 @@ export default {
       bid: 0,
       loading: true,
       cDragger: null, //card Dragger의 상태값
+      lDragger: null,
       isEditTitle: false,
       inputTitle: ''
     };
@@ -69,6 +70,7 @@ export default {
   updated() {
     //보드의 자식컴포넌트가 모두 렌더링된후 호출시키기 위해 updated에서 호출
     this.setCardDragabble()
+    this.setListDragabble()
   },
   created() {
     this.fetchData().then(() => {
@@ -86,6 +88,7 @@ export default {
       'FETCH_BOARD',
       'UPDATE_CARD',
       'UPDATE_BOARD',
+      'UPDATE_LIST',
       ]),
     fetchData() {
       this.loading = true;
@@ -99,12 +102,14 @@ export default {
       this.cDragger = dragger.init(Array.from(this.$el.querySelectorAll('.card-list')))
 
       this.cDragger.on('drop', (el, wrapper, target, silblings) => {
+        console.log(wrapper)
         const targetCard = {
           id: el.dataset.cardId * 1,
+          listId: wrapper.dataset.listId * 1,
           pos: 65535
         }
 
-        const { prev, next } = dragger.silblings({
+        const { prev, next } = dragger.sibling({
           el, 
           wrapper, 
           candidates: Array.from(wrapper.querySelectorAll('.card-item')), 
@@ -119,6 +124,40 @@ export default {
         else if (prev && next) targetCard.pos = (prev.pos + next.pos) / 2
 
         this.UPDATE_CARD(targetCard)
+      })
+    },
+    setListDragabble() {
+      if (this.lDragger) this.lDragger.destroy()
+
+      const options = {
+        invalid: (el, handle) => !/^list/.test(handle.className)
+      }
+      this.lDragger = dragger.init(
+        Array.from(this.$el.querySelectorAll('.list-section')),
+        options
+      )
+
+      this.lDragger.on('drop', (el, wrapper, target, silblings) => {
+        const targetList = {
+          id: el.dataset.listId * 1,
+          pos: 65535
+        }
+
+        const { prev, next } = dragger.sibling({
+          el, 
+          wrapper, 
+          candidates: Array.from(wrapper.querySelectorAll('.list')), 
+          type: 'list'
+        })
+
+        // 가장 첫번쨰 요소로 이동했다면
+        if (!prev && next) targetList.pos = next.pos / 2
+        // 가장 마지막 요소로 이동했다면
+        else if (!next && prev) targetList.pos = prev.pos * 2
+        // 중간으로 이동했다면
+        else if (prev && next) targetList.pos = (prev.pos + next.pos) / 2
+
+        this.UPDATE_LIST(targetList)
       })
     },
     onShowSettings() {

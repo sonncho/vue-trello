@@ -1,5 +1,5 @@
 <template>
-  <div class="list">
+  <div class="list" :data-list-id="data.id" :data-list-pos="data.pos">
     <div class="list-header">
       <input
         v-if="isEditTitle"
@@ -16,7 +16,7 @@
         @click="onClickTitle"
       >{{ data.title }}</div>
     </div>
-    <div class="card-list">
+    <div class="card-list" :data-list-id="data.id">
       <card-item v-for="card in data.cards" :key="card.id" :data="card" />
     </div>
     <div v-if="isAddCard">
